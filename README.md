@@ -1,41 +1,51 @@
-# <span style="color:#C0BFEC">**🦔 Measurement experiments**</span>
+# Measurement experiments
 
-## <span style="color:#C0BFEC">**📑 Description:**</span>
+Practice work on measuring C programs rather than writing them. Several implementations
+compute the same result, and the question is which one is faster, by how much, whether the
+answer survives a change of data size, and whether the compiler erases the difference once
+optimisation is turned on. Every comparison is therefore run at `-O0`, `-O1`, `-O2` and
+`-O3`.
 
-This practical work included many different interesting topics that were interesting to study:
+Everything around the measurement is scripted, which is the real content of the practice.
+`build_apps.sh` compiles the variants, `go.sh` drives the series, `update_data.sh`
+regenerates the input, the Python scripts prepare the data and reduce the raw timings
+afterwards, and gnuplot turns the result into the plots below.
 
-- Automation of functional testing
+## Arrays
 
-- Studying the stages of compilation and the structure of the executable file
+Three ways of walking the same data, by index, by pointer arithmetic and through an array
+of pointers.
 
-- Debugging
+![Array access](src/array_experiment/first_graph.svg)
 
-- Measurement experiments
+A single run says little, so the same series is also reduced to minimum, maximum, quartiles
+and median.
 
-However, the largest topic for study was the `measuring experiment`
+![Spread of the measurements](src/array_experiment/third_graph.svg)
 
-## <span style="color:#C0BFEC">**🧪 More about the experiment:**</span>
+## Matrices
 
-This repository provides two measurement experiments:
+Addition written with and without `restrict`, which tells the compiler the operands do not
+overlap.
 
-- with matrices
+![Matrix addition](src/matrix_experiment/addit_matrix_graph.svg)
 
-- with arrays
+Multiplication in three variants, transposing both operands, one of them, or neither.
 
-Both were implemented using utilities and languages. For example, the entire assembly of measured programs, processing and output is done by `Bash` scripts, and the processing of the received time is done by `Python` scripts.
+![Matrix multiplication](src/matrix_experiment/multi_matrix_graph.svg)
 
-## <span style="color:#C0BFEC">**🏃🏻‍♂️ Run**</span>
+Sorting in the plain order and in the one that follows how the rows lie in cache.
 
-- To run the experimenter with `arrays`:
+![Matrix sorting](src/matrix_experiment/sort_matrix_graph.svg)
 
-```shell
-cd src/array_experiment
-./go.sh
+## Running
+
+```bash
+cd src/array_experiment && ./go.sh
 ```
 
-- To run the experimenter with `matrices`:
-
-```shell
-cd src/matrix_experiment
-./go.sh
+```bash
+cd src/matrix_experiment && ./go.sh
 ```
+
+The final report with the measurements is in `doc/`.
